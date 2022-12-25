@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Container(
-        child: const Text("prod"),
+      home: const SizedBox(
+        child: Text("prod"),
       ),
     );
   }
