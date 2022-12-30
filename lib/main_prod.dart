@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:tmdp_getx_mvc/_core/app_config.dart';
+import 'package:tmdp_getx_mvc/_core/app_constant.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'app.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SizedBox(
-        child: Text("prod"),
-      ),
-    );
-  }
+  envConfig = prod;
+  final appConfig = AppConfig(
+      appTitle: "TMDB Prod",
+      buildFlavor: "prod",
+      envConfig: prod,
+      child: Container());
+
+  await appInitializer(appConfig);
 }
