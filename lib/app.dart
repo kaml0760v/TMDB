@@ -23,14 +23,12 @@ class MyApp extends StatelessWidget {
         initialBinding: InitBindings(),
         debugShowCheckedModeBanner: false,
         title: AppConfig.of(context)?.appTitle ?? "",
-        theme: Apptheme.lightTheme,
+        theme: AppTheme.lightTheme,
         home: const SplashScreen(),
       ),
     );
   }
 }
-
-
 
 Future appInitializer(AppConfig appConfig) async {
   await GetStorage.init('auth');

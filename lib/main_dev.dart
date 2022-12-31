@@ -12,7 +12,7 @@ Future<void> main() async {
       appTitle: "TMDB Dev",
       buildFlavor: "dev",
       envConfig: development,
-      child: Container());
+      child: Container(),);
 
   await appInitializer(appConfig);
 }

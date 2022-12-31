@@ -11,6 +11,7 @@ class AppConfig extends InheritedWidget {
   final String buildFlavor;
 
   @override
+  // ignore: overridden_fields
   final Widget child;
   final EnvConfig envConfig;
 

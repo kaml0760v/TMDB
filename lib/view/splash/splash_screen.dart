@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   top: 16,
                 ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Apptheme.grey1),
+                  border: Border.all(color: AppTheme.grey1),
                   borderRadius: BorderRadius.circular(25),
                   color: Colors.white,
                 ),
@@ -68,13 +68,13 @@ class _SplashScreenState extends State<SplashScreen> {
                       Text(
                         "Get Started",
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                              color: Apptheme.grey1,
+                              color: AppTheme.grey1,
                               fontWeight: FontWeight.w700,
                             ),
                       ),
                       const Icon(
                         Icons.arrow_circle_right_outlined,
-                        color: Apptheme.grey1,
+                        color: AppTheme.grey1,
                       ),
                     ],
                   ],

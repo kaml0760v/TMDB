@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Apptheme {
-  Apptheme._();
+class AppTheme {
+  AppTheme._();
   static const primaryColor = Color(0xFF203066);
   static const primaryColor_80 = Color(0xFF203066);
   static const primaryColor_60 = Color(0xFF203066);
