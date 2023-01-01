@@ -8,5 +8,11 @@ class Auth {
 
   static bool get sessionId => box.read('sessionId');
   static bool get guestSessionId => box.read('guestSessionId');
-  
+
+  static void setGusestSessionId(String sessionId) async =>
+      await box.write("guestSessionId", sessionId);
+  static void setSessionId(String sessionId) async =>
+      await box.write("sessionId", sessionId);
+
+  static void logOut() async => await box.erase();
 }

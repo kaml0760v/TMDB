@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:tmdp_getx_mvc/_core/app_constant.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
@@ -25,16 +25,18 @@ class NetworkCall<T> {
     required Future<Either<Failure, T>> Function(Map responseBody)
         handleSuccess,
     Future<Either<Failure, T>> Function(Map responseBody)? handle400,
+    Future<Either<Failure, T>> Function(Map responseBody)? handle401,
+    Future<Either<Failure, T>> Function(Map responseBody)? handle404,
   }) async {
     headers ??= {
       HttpHeaders.contentTypeHeader: 'application/json;charset=utf-8',
       HttpHeaders.authorizationHeader: "Bearer ${envConfig!.readApiToken}"
     };
 
-    late dio.Response response;
+    late Response response;
 
     try {
-      final String uri = fullUri ?? "${envConfig!.apiBaseUrl}/$endpoint";
+      final String uri = fullUri ?? "${envConfig!.apiBaseUrl}$endpoint";
 
       if (body != null) {
         body = jsonEncode(body);
@@ -53,28 +55,32 @@ class NetworkCall<T> {
       }
 
       if (callType == ApiCallType.get) {
-        response = await dio.Dio().get(
+        response = await Dio().get(
           uri,
-          options: dio.Options(headers: headers, sendTimeout: 30000),
+          options: Options(
+            headers: headers,
+            sendTimeout: 50000,
+            validateStatus: (_) => true,
+          ),
           queryParameters: queryParameter,
         );
       } else if (callType == ApiCallType.post) {
-        response = await dio.Dio().post(
+        response = await Dio().post(
           uri,
-          options: dio.Options(headers: headers, sendTimeout: 30000),
+          options: Options(headers: headers, sendTimeout: 30000),
           queryParameters: queryParameter,
           data: body,
         );
       } else if (callType == ApiCallType.delete) {
-        response = await dio.Dio().delete(
+        response = await Dio().delete(
           uri,
-          options: dio.Options(headers: headers, sendTimeout: 30000),
+          options: Options(headers: headers, sendTimeout: 30000),
           queryParameters: queryParameter,
           data: body,
         );
       }
-
-      final responseBody = jsonDecode(response.data) as Map;
+      print(response.data);
+      final Map responseBody = response.data as Map;
 
       if (response.statusCode == 200) {
         final result = await handleSuccess(responseBody);
@@ -85,10 +91,25 @@ class NetworkCall<T> {
         } else {
           return left(Failure.commonFailure());
         }
+      } else if (response.statusCode == 401) {
+        if (handle401 != null) {
+          return handle401(responseBody);
+        } else {
+          return left(
+              Failure.unexpected(errorMsg: responseBody['status_message']));
+        }
+      } else if (response.statusCode == 404) {
+        if (handle404 != null) {
+          return handle404(responseBody);
+        } else {
+          return left(
+              Failure.unexpected(errorMsg: responseBody['status_message']));
+        }
       } else {
         return left(Failure.commonFailure());
       }
-    } on SocketException catch (_) {
+    } on SocketException catch (e) {
+      print(e);
       return left(const Failure.networkError());
     } on TimeoutException catch (_) {
       return left(const Failure.timeout());

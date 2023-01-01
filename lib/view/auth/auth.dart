@@ -84,8 +84,8 @@ class _AuthPageState extends State<AuthPage> {
                     const SizedBox(height: 6),
                     PrimaryButton(
                       size: SIZES.large,
-                      onPressed: () {
-                        
+                      onPressed: () async {
+                        await authController.createGuestSession();
                       },
                       horizPadding: 0,
                       btnText: "Login as Guest",
