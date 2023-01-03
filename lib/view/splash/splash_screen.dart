@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(color: AppTheme.grey1),
                   borderRadius: BorderRadius.circular(25),
-                  color: Colors.white,
+                  color: AppTheme.white,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

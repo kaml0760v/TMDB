@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tmdp_getx_mvc/_core/app_theme/app_theme.dart';
 import 'package:tmdp_getx_mvc/_core/injection.dart';
 import 'package:tmdp_getx_mvc/_core/routes/app_routes.dart';
+import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
+import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
 import 'package:tmdp_getx_mvc/view/_core/widgets/loader_dialog.dart';
 
 import '../services/auth_services.dart';
 
 class AuthController extends GetxController {
   final _authService = getIt<AuthServices>();
+  final _utilityController = Get.find<UtitlityController>();
+
   final usernameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final usernameController = TextEditingController();
@@ -17,14 +20,14 @@ class AuthController extends GetxController {
 
   String? validateUsername(String? username) {
     if (username == null || username.isEmpty) {
-      return "Please enter Username!";
+      return StringConstant.usernameError;
     }
     return null;
   }
 
   String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return "Please enter Password!";
+      return StringConstant.passwordError;
     }
     return null;
   }
@@ -37,25 +40,88 @@ class AuthController extends GetxController {
     result.fold(
       (l) {
         final message = l.maybeMap(
-          orElse: () => "Opps, Something went Wrong!",
+          orElse: () => StringConstant.someWentWrong,
           unexpected: (value) => value.errorMsg,
         );
 
-        Get.snackbar(
-          'Authentication Failed',
-          message,
-          backgroundColor: AppTheme.primaryColor,
-          dismissDirection: DismissDirection.horizontal,
-          barBlur: 0,
-          colorText: Colors.white,
-        );
+        _utilityController.loadSnackbar(
+            title: StringConstant.authFailError, message: message);
       },
       (r) {
-        Auth.setGusestSessionId(r['guest_session_id']);
+        Auth.setGusestSessionId(r[StringConstant.guestSessionId] ?? "");
+        Auth.setExpiresAt(r['expires_at'] ?? "");
+        print(r['expires_at']);
         Get.offAllNamed(AppRoutes.dashBoard);
       },
     );
   }
 
-  void loginWithUsernamePassword() async {}
+  Future<void> loginWithUsernamePassword() async {
+    Get.dialog(const AnimatedLoader(), barrierDismissible: false);
+    final result = await _authService.createRequestToken();
+    Navigator.of(Get.overlayContext!).pop();
+
+    result.fold(
+      (l) {
+        final message = l.maybeMap(
+          orElse: () => StringConstant.someWentWrong,
+          unexpected: (value) => value.errorMsg,
+        );
+
+        _utilityController.loadSnackbar(
+            title: StringConstant.authFailError, message: message);
+      },
+      (r) async {
+        await createUserSession(requestToken: r[StringConstant.requestToken]);
+      },
+    );
+  }
+
+  Future<void> createUserSession({required String requestToken}) async {
+    Get.dialog(const AnimatedLoader(), barrierDismissible: false);
+    final result = await _authService.createUserSession(body: {
+      "request_token": requestToken,
+      "username": usernameController.text.trim(),
+      "password": passwordController.text.trim(),
+    });
+    Navigator.of(Get.overlayContext!).pop();
+
+    result.fold(
+      (l) {
+        final message = l.maybeMap(
+          orElse: () => StringConstant.someWentWrong,
+          unexpected: (value) => value.errorMsg,
+        );
+
+        _utilityController.loadSnackbar(
+            title: StringConstant.authFailError, message: message);
+      },
+      (r) async {
+        Auth.setSessionId(r[StringConstant.sessionId]);
+        Get.offAllNamed(AppRoutes.dashBoard);
+      },
+    );
+  }
+
+  Future<void> logout() async {
+    Get.dialog(const AnimatedLoader(), barrierDismissible: false);
+    final result = await _authService.deleteSession();
+    Navigator.of(Get.overlayContext!).pop();
+
+    result.fold(
+      (l) {
+        final message = l.maybeMap(
+          orElse: () => StringConstant.someWentWrong,
+          unexpected: (value) => value.errorMsg,
+        );
+
+        _utilityController.loadSnackbar(
+            title: StringConstant.authFailError, message: message);
+      },
+      (r) {
+        Auth.logOut();
+        Get.offAllNamed(AppRoutes.auth);
+      },
+    );
+  }
 }

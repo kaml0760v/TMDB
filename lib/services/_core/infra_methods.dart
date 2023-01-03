@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tmdp_getx_mvc/_core/app_constant.dart';
+import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
 
@@ -47,11 +48,11 @@ class NetworkCall<T> {
       };
 
       if (Auth.isLoggedIn) {
-        queryParameter["session_id"] = Auth.sessionId;
+        queryParameter[StringConstant.sessionId] = Auth.getSessionId;
       }
 
       if (Auth.isGuestLoggedIn) {
-        queryParameter["guest_session_id"] = Auth.guestSessionId;
+        queryParameter[StringConstant.guestSessionId] = Auth.getGuestSessionId;
       }
 
       if (callType == ApiCallType.get) {
@@ -96,14 +97,14 @@ class NetworkCall<T> {
           return handle401(responseBody);
         } else {
           return left(
-              Failure.unexpected(errorMsg: responseBody['status_message']));
+              Failure.unexpected(errorMsg: responseBody[StringConstant.statusMessage]));
         }
       } else if (response.statusCode == 404) {
         if (handle404 != null) {
           return handle404(responseBody);
         } else {
           return left(
-              Failure.unexpected(errorMsg: responseBody['status_message']));
+              Failure.unexpected(errorMsg: responseBody[StringConstant.statusMessage]));
         }
       } else {
         return left(Failure.commonFailure());

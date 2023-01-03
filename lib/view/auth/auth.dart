@@ -76,7 +76,9 @@ class _AuthPageState extends State<AuthPage> {
                     PrimaryButton(
                       size: SIZES.large,
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          
+                        }
                       },
                       horizPadding: 0,
                       btnText: "Login",

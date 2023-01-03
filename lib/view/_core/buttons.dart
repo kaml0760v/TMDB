@@ -81,7 +81,7 @@ class PrimaryButton extends StatelessWidget {
                 width: 25.0,
                 child: CircularProgressIndicator(
                   strokeWidth: 3.0,
-                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                  valueColor: AlwaysStoppedAnimation(AppTheme.white),
                 ),
               )
             : Row(
@@ -99,7 +99,7 @@ class PrimaryButton extends StatelessWidget {
                               ? Theme.of(context).textTheme.bodyText2!.copyWith(
                                     color: isDisabled
                                         ? AppTheme.grey2
-                                        : textColor ?? Colors.white,
+                                        : textColor ?? AppTheme.white,
                                   )
                               : size == SIZES.medium
                                   ? Theme.of(context)
@@ -108,7 +108,7 @@ class PrimaryButton extends StatelessWidget {
                                       .copyWith(
                                         color: isDisabled
                                             ? AppTheme.grey2
-                                            : textColor ?? Colors.white,
+                                            : textColor ?? AppTheme.white,
                                       )
                                   : Theme.of(context)
                                       .textTheme
@@ -116,7 +116,7 @@ class PrimaryButton extends StatelessWidget {
                                       .copyWith(
                                         color: isDisabled
                                             ? AppTheme.grey2
-                                            : textColor ?? Colors.white,
+                                            : textColor ?? AppTheme.white,
                                       ),
                     ),
                   ),

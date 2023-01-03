@@ -29,6 +29,7 @@ class AppTheme {
   static const darkGrey = Color(0xFF181818);
 
   static const black = Color(0xFF001A28);
+  static const white = Color(0xFFFFFFFF);
   static const bgColor = Color(0xFFFFFFFF);
   static const gradientColor = Color(0xFF36298B);
   static const inActiveTabColor = Color(0xFFFFD0C7);
@@ -40,7 +41,7 @@ class AppTheme {
   static const error = Color(0xffE63C1E);
 
   static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: AppTheme.white,
     brightness: Brightness.light,
     textTheme: lightTextTheme,
     fontFamily: 'Comfortaa',
