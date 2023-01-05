@@ -6,7 +6,7 @@ import 'package:tmdp_getx_mvc/_core/assets.dart';
 import 'package:tmdp_getx_mvc/controllers/auth_controller.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
 import 'package:tmdp_getx_mvc/view/_core/buttons.dart';
-import 'package:tmdp_getx_mvc/view/auth/common_text_field.dart';
+import 'package:tmdp_getx_mvc/view/auth/widgets/common_text_field.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -75,9 +75,9 @@ class _AuthPageState extends State<AuthPage> {
                     SizedBox(height: 8.w),
                     PrimaryButton(
                       size: SIZES.large,
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          
+                          await authController.loginWithUsernamePassword();
                         }
                       },
                       horizPadding: 0,

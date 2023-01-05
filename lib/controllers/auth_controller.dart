@@ -50,8 +50,7 @@ class AuthController extends GetxController {
       (r) {
         Auth.setGusestSessionId(r[StringConstant.guestSessionId] ?? "");
         Auth.setExpiresAt(r['expires_at'] ?? "");
-        print(r['expires_at']);
-        Get.offAllNamed(AppRoutes.dashBoard);
+        Get.offAllNamed(AppRoutes.home);
       },
     );
   }
@@ -72,14 +71,14 @@ class AuthController extends GetxController {
             title: StringConstant.authFailError, message: message);
       },
       (r) async {
-        await createUserSession(requestToken: r[StringConstant.requestToken]);
+        await getUserToken(requestToken: r[StringConstant.requestToken]);
       },
     );
   }
 
-  Future<void> createUserSession({required String requestToken}) async {
+  Future<void> getUserToken({required String requestToken}) async {
     Get.dialog(const AnimatedLoader(), barrierDismissible: false);
-    final result = await _authService.createUserSession(body: {
+    final result = await _authService.getUserToken(body: {
       "request_token": requestToken,
       "username": usernameController.text.trim(),
       "password": passwordController.text.trim(),
@@ -97,8 +96,32 @@ class AuthController extends GetxController {
             title: StringConstant.authFailError, message: message);
       },
       (r) async {
-        Auth.setSessionId(r[StringConstant.sessionId]);
-        Get.offAllNamed(AppRoutes.dashBoard);
+        Auth.setExpiresAt(r['expires_at'] ?? "");
+        await createUserSession(requestToken: r[StringConstant.requestToken]);
+      },
+    );
+  }
+
+  Future<void> createUserSession({required String requestToken}) async {
+    Get.dialog(const AnimatedLoader(), barrierDismissible: false);
+    final result = await _authService.createUserSession(body: {
+      "request_token": requestToken,
+    });
+    Navigator.of(Get.overlayContext!).pop();
+
+    result.fold(
+      (l) {
+        final message = l.maybeMap(
+          orElse: () => StringConstant.someWentWrong,
+          unexpected: (value) => value.errorMsg,
+        );
+
+        _utilityController.loadSnackbar(
+            title: StringConstant.authFailError, message: message);
+      },
+      (r) async {
+        Auth.setSessionId(r['session_id'] ?? "");
+        Get.offAllNamed(AppRoutes.home);
       },
     );
   }
@@ -118,10 +141,9 @@ class AuthController extends GetxController {
         _utilityController.loadSnackbar(
             title: StringConstant.authFailError, message: message);
       },
-      (r) {
-        Auth.logOut();
-        Get.offAllNamed(AppRoutes.auth);
-      },
+      (r) {},
     );
+    Auth.logOut();
+    Get.offAllNamed(AppRoutes.auth);
   }
 }

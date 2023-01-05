@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer.periodic(const Duration(seconds: 3), (timer) {
       Auth.isLoggedIn || Auth.isGuestLoggedIn
-          ? Get.offNamed(AppRoutes.dashBoard)
+          ? Get.offNamed(AppRoutes.home)
           : Get.offNamed(AppRoutes.auth);
     });
   }

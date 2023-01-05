@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
 import 'package:tmdp_getx_mvc/services/_core/infra_methods.dart';
+import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
 @LazySingleton()
 class AuthServices {
@@ -20,9 +21,18 @@ class AuthServices {
     );
   }
 
-  Future<Either<Failure, Map>> createUserSession({required Map body}) async {
+  Future<Either<Failure, Map>> getUserToken({required Map body}) async {
     return await NetworkCall<Map>().handleApi(
       endpoint: 'authentication/token/validate_with_login',
+      callType: ApiCallType.post,
+      body: body,
+      handleSuccess: (responseBody) async => right(responseBody),
+    );
+  }
+
+  Future<Either<Failure, Map>> createUserSession({required Map body}) async {
+    return await NetworkCall<Map>().handleApi(
+      endpoint: 'authentication/session/new',
       callType: ApiCallType.post,
       body: body,
       handleSuccess: (responseBody) async => right(responseBody),
@@ -37,7 +47,10 @@ class AuthServices {
         "session_id":
             Auth.isLoggedIn ? Auth.getSessionId : Auth.getGuestSessionId
       },
-      handleSuccess: (responseBody) async => right(true),
+      handleSuccess: (responseBody) async {
+        "here $responseBody".printLog();
+        return right(true);
+      },
     );
   }
 }

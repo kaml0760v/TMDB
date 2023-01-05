@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:tmdp_getx_mvc/_core/routes/app_routes.dart';
-import 'package:tmdp_getx_mvc/view/auth/auth.dart';
-import 'package:tmdp_getx_mvc/view/dash_board/dash_board.dart';
+import 'package:tmdp_getx_mvc/view/auth/auth_page.dart';
+import 'package:tmdp_getx_mvc/view/dash_board/dash_board_page.dart';
+import 'package:tmdp_getx_mvc/view/home/home_page.dart';
+import 'package:tmdp_getx_mvc/view/profile/profile_page.dart';
+import 'package:tmdp_getx_mvc/view/watch_list/watch_list_page.dart';
 
 import '../../view/splash/splash_screen.dart';
 
@@ -19,6 +22,18 @@ class Routes {
       GetPage(
         name: AppRoutes.dashBoard,
         page: () => const DashBoardPage(),
+      ),
+      GetPage(
+        name: AppRoutes.watchList,
+        page: () => const WatchListPage(),
+      ),
+      GetPage(
+        name: AppRoutes.profile,
+        page: () => const ProfilePage(),
+      ),
+      GetPage(
+        name: AppRoutes.home,
+        page: () => const HomePage(),
       ),
     ];
   }

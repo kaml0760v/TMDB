@@ -6,8 +6,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tmdp_getx_mvc/_core/app_constant.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
-import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
+import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
 enum ApiCallType {
   get,
@@ -47,14 +47,6 @@ class NetworkCall<T> {
         "api_key": envConfig!.apiKey,
       };
 
-      if (Auth.isLoggedIn) {
-        queryParameter[StringConstant.sessionId] = Auth.getSessionId;
-      }
-
-      if (Auth.isGuestLoggedIn) {
-        queryParameter[StringConstant.guestSessionId] = Auth.getGuestSessionId;
-      }
-
       if (callType == ApiCallType.get) {
         response = await Dio().get(
           uri,
@@ -68,19 +60,27 @@ class NetworkCall<T> {
       } else if (callType == ApiCallType.post) {
         response = await Dio().post(
           uri,
-          options: Options(headers: headers, sendTimeout: 30000),
+          options: Options(
+            headers: headers,
+            sendTimeout: 30000,
+            validateStatus: (_) => true,
+          ),
           queryParameters: queryParameter,
           data: body,
         );
       } else if (callType == ApiCallType.delete) {
+        "wdmlwmdwl $body".printLog();
         response = await Dio().delete(
           uri,
-          options: Options(headers: headers, sendTimeout: 30000),
+          options: Options(
+            headers: headers,
+            sendTimeout: 30000,
+            validateStatus: (_) => true,
+          ),
           queryParameters: queryParameter,
           data: body,
         );
       }
-      print(response.data);
       final Map responseBody = response.data as Map;
 
       if (response.statusCode == 200) {
@@ -96,21 +96,21 @@ class NetworkCall<T> {
         if (handle401 != null) {
           return handle401(responseBody);
         } else {
-          return left(
-              Failure.unexpected(errorMsg: responseBody[StringConstant.statusMessage]));
+          return left(Failure.unexpected(
+              errorMsg: responseBody[StringConstant.statusMessage]));
         }
       } else if (response.statusCode == 404) {
         if (handle404 != null) {
           return handle404(responseBody);
         } else {
-          return left(
-              Failure.unexpected(errorMsg: responseBody[StringConstant.statusMessage]));
+          "$responseBody".printLog();
+          return left(Failure.unexpected(
+              errorMsg: responseBody[StringConstant.statusMessage]));
         }
       } else {
         return left(Failure.commonFailure());
       }
-    } on SocketException catch (e) {
-      print(e);
+    } on SocketException {
       return left(const Failure.networkError());
     } on TimeoutException catch (_) {
       return left(const Failure.timeout());
