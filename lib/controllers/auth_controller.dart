@@ -8,9 +8,12 @@ import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
 import 'package:tmdp_getx_mvc/view/_core/widgets/loader_dialog.dart';
 
 import '../services/auth_services.dart';
+import '../services/user_account_service.dart';
 
 class AuthController extends GetxController {
   final _authService = getIt<AuthServices>();
+  final _accountService = getIt<UserAccountService>();
+
   final _utilityController = Get.find<UtitlityController>();
 
   final usernameFocusNode = FocusNode();
@@ -121,6 +124,16 @@ class AuthController extends GetxController {
       },
       (r) async {
         Auth.setSessionId(r['session_id'] ?? "");
+
+        await _accountService.getAccountDetails().then(
+              (value) => value.fold((l) => null, (r) {
+                Auth.setUsername(r['username'] ?? "");
+                Auth.setFullname(r['name'] ?? "");
+                Auth.setUserAvatar(r['avatar']['tmdb']['avatar_path'] ?? "");
+                Auth.setUserGrvatar(r['avatar']['gravatar']['hash'] ?? "");
+              }),
+            );
+
         Get.offAllNamed(AppRoutes.home);
       },
     );
