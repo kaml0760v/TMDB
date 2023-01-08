@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tmdp_getx_mvc/_core/injection.dart';
 import 'package:tmdp_getx_mvc/services/configuration_service.dart';
-import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
 import '../models/api_configuration.dart';
 

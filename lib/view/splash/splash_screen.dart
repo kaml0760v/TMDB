@@ -26,7 +26,15 @@ class _SplashScreenState extends State<SplashScreen> {
       Auth.isLoggedIn || Auth.isGuestLoggedIn
           ? Get.offNamed(AppRoutes.home)
           : Get.offNamed(AppRoutes.auth);
+
+      timer.cancel();
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

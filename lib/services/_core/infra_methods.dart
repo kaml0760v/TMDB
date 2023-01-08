@@ -9,6 +9,8 @@ import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
 import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
+import '../../_core/utils/auth.dart';
+
 enum ApiCallType {
   get,
   post,
@@ -22,6 +24,7 @@ class NetworkCall<T> {
     Object? body,
     String? fullUri,
     Map<String, String>? headers,
+    Map<String, String>? queryParameters,
     ApiCallType callType = ApiCallType.get,
     required Future<Either<Failure, T>> Function(Map responseBody)
         handleSuccess,
@@ -47,6 +50,8 @@ class NetworkCall<T> {
         "api_key": envConfig!.apiKey,
       };
 
+      queryParameter.addAll(queryParameters ?? {});
+
       if (callType == ApiCallType.get) {
         response = await Dio().get(
           uri,
@@ -57,6 +62,7 @@ class NetworkCall<T> {
           ),
           queryParameters: queryParameter,
         );
+        "wkdwkdwmdwkmd $response".printLog();
       } else if (callType == ApiCallType.post) {
         response = await Dio().post(
           uri,

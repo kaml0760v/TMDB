@@ -5,6 +5,7 @@ import 'package:tmdp_getx_mvc/_core/routes/app_routes.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
+import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 import 'package:tmdp_getx_mvc/view/_core/widgets/loader_dialog.dart';
 
 import '../services/auth_services.dart';
@@ -126,13 +127,18 @@ class AuthController extends GetxController {
         Auth.setSessionId(r['session_id'] ?? "");
 
         await _accountService.getAccountDetails().then(
-              (value) => value.fold((l) => null, (r) {
-                Auth.setUsername(r['username'] ?? "");
-                Auth.setFullname(r['name'] ?? "");
-                Auth.setUserAvatar(r['avatar']['tmdb']['avatar_path'] ?? "");
-                Auth.setUserGrvatar(r['avatar']['gravatar']['hash'] ?? "");
+              (value) => value.fold((l) => null, (result) {
+                "efekfm $result".printLog();
+                Auth.setUsername(result['username'] ?? "");
+                Auth.setFullname(result['name'] ?? "");
+                Auth.setUserAvatar(
+                    result['avatar']['tmdb']['avatar_path'] ?? "");
+                Auth.setUserGrvatar(result['avatar']['gravatar']['hash'] ?? "");
               }),
             );
+
+        usernameController.clear();
+        passwordController.clear();
 
         Get.offAllNamed(AppRoutes.home);
       },
