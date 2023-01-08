@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   final _authService = getIt<AuthServices>();
   final _accountService = getIt<UserAccountService>();
 
-  final _utilityController = Get.find<UtitlityController>();
+  final _utilityController = Get.find<UtilityController>();
 
   final usernameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();

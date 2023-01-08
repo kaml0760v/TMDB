@@ -12,13 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late UtitlityController _utilityController;
+  late UtilityController _utilityController;
   late ConfigurationController _configurationController;
 
   @override
   void initState() {
-    _utilityController = Get.find<UtitlityController>();
-    _configurationController = Get.put(ConfigurationController(),permanent: true);
+    _utilityController = Get.find<UtilityController>();
+    _configurationController =
+        Get.put(ConfigurationController(), permanent: true);
 
     super.initState();
   }

@@ -10,6 +10,6 @@ class InitBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => AuthController(), fenix: true);
-    Get.lazyPut(() => UtitlityController(), fenix: true);
+    Get.lazyPut(() => UtilityController(), fenix: true);
   }
 }

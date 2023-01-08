@@ -5,6 +5,14 @@ class Movies {
   bool? adult;
   String? overView;
   DateTime? releaseDate;
+  String? originalLanguage;
+  String? originalTitle;
+  String? title;
+  String? backdropPath;
+  double? popularity;
+  int? voteCount;
+  bool? video;
+  double? voteAverage;
 
   Movies({
     this.id,
@@ -13,6 +21,14 @@ class Movies {
     this.overView,
     this.posterPath,
     this.releaseDate,
+    this.backdropPath,
+    this.originalLanguage,
+    this.originalTitle,
+    this.popularity,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
   });
 
   factory Movies.fromJson(Map<String, dynamic> json) => Movies(
@@ -26,6 +42,16 @@ class Movies {
         releaseDate: ((json['release_date'] ?? "") as String).isEmpty
             ? null
             : DateTime.parse(json['release_date'] as String),
+        backdropPath: json['backdrop_path'] as String?,
+        originalLanguage: json['original_language'] as String?,
+        originalTitle: json['original_title'] as String?,
+        popularity: json['popularity'] as double?,
+        title: json['title'] as String?,
+        video: json['video'] as bool?,
+        voteAverage: json['vote_average'] as double?,
+        voteCount: json['vote_count'] as int?,
+
+        
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +61,14 @@ class Movies {
         "overview": overView,
         "poster_path": posterPath,
         "release_date": releaseDate,
+        "backdrop_path":backdropPath,
+        "original_language":originalLanguage,
+        "original_title":originalTitle,
+        "popularity":popularity,
+        "title":title,
+        "video":video,
+        "vote_average":voteAverage,
+        "vote_count":voteCount,
+
       };
 }

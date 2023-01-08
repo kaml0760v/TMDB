@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tmdp_getx_mvc/_core/utils/preference.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../_core/app_theme/app_theme.dart';
@@ -9,7 +10,7 @@ import '../view/dash_board/dash_board_page.dart';
 import '../view/profile/profile_page.dart';
 import '../view/watch_list/watch_list_page.dart';
 
-class UtitlityController extends GetxController {
+class UtilityController extends GetxController {
   final _pageIndex = 0.obs;
   final pages = [
     const DashBoardPage(),
@@ -18,9 +19,16 @@ class UtitlityController extends GetxController {
   ].obs;
 
   int get navIndex => _pageIndex.value;
+  final _isMovieToday = Preferences.movieIsToday.obs;
+  bool get isMovieToday => _isMovieToday.value;
 
   void setNavIndex(int index) {
     _pageIndex.value = index;
+  }
+
+  void toggleTrendingMovieSwitch() {
+    _isMovieToday.value = !_isMovieToday.value;
+    Preferences.setMoveiIstodayState(_isMovieToday.value);
   }
 
   Future<void> loadUrl({required String uri}) async {

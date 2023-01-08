@@ -18,7 +18,7 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
   final authController = Get.find<AuthController>();
-  final utilityController = Get.find<UtitlityController>();
+  final utilityController = Get.find<UtilityController>();
 
   @override
   Widget build(BuildContext context) {
