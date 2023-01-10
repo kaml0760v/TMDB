@@ -1,9 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../_core/app_theme/app_theme.dart';
-
 
 class AnimatedLoader extends StatelessWidget {
   const AnimatedLoader({Key? key}) : super(key: key);
@@ -46,4 +46,21 @@ class AnimatedLoader extends StatelessWidget {
       ),
     );
   }
+}
+
+class LoadingSpinner {
+  SpinKitFadingCircle fadingCircleSpinner = const SpinKitFadingCircle(
+    // size: 14,
+    color: AppTheme.primaryColor,
+  );
+
+  SpinKitFadingCircle miniFadingCircleSpinner = const SpinKitFadingCircle(
+    size: 22,
+    color: AppTheme.white,
+  );
+
+  SpinKitThreeBounce horizontalLoading = const SpinKitThreeBounce(
+    size: 14,
+    color: AppTheme.primaryColor_40,
+  );
 }

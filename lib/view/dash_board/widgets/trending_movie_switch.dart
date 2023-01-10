@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tmdp_getx_mvc/_core/app_theme/app_theme.dart';
+import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/controllers/trending_items_controller.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tmdp_getx_mvc/view/_core/widgets/loader_dialog.dart';
 
 class TrendingMovieSwitchBtnBuilder extends StatelessWidget {
   TrendingMovieSwitchBtnBuilder({
@@ -33,13 +34,7 @@ class TrendingMovieSwitchBtnBuilder extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? BorderRadius.circular(8),
           color: color ?? AppTheme.primaryColor,
-          border: border ??
-              const Border(
-                bottom: BorderSide.none,
-                top: BorderSide.none,
-                left: BorderSide.none,
-                right: BorderSide.none,
-              ),
+          border: border,
         ),
         child: Row(
           children: [
@@ -48,7 +43,7 @@ class TrendingMovieSwitchBtnBuilder extends StatelessWidget {
                     height: 20,
                     padding: padding ??
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    child: SpinKitThreeBounce(),
+                    child: LoadingSpinner().horizontalLoading,
                   )
                 : GestureDetector(
                     onTap: () {
@@ -57,16 +52,16 @@ class TrendingMovieSwitchBtnBuilder extends StatelessWidget {
 
                       if (_utilityController.isMovieToday) {
                         _trendingItemController.getTrendingMovies(
-                            timeWindow: "day");
+                            timeWindow: StringConstant.day);
                       } else {
                         _trendingItemController.getTrendingMovies(
-                            timeWindow: "week");
+                            timeWindow: StringConstant.week);
                       }
                     },
                     child: Container(
                       padding: padding ??
                           const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
+                              horizontal: 8, vertical: 4),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: AppTheme.primaryColor,

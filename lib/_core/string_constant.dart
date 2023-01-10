@@ -9,4 +9,6 @@ class StringConstant {
   static const String requestToken = 'request_token';
   static const String movie = 'movie';
   static const String error = 'Error!';
+  static const String day = 'day';
+  static const String week = 'week';
 }

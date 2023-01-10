@@ -3,13 +3,23 @@ import 'package:tmdp_getx_mvc/_core/injection.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
 import 'package:tmdp_getx_mvc/models/movies.dart';
-import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
 import '../services/trending_items_service.dart';
 
 class TrendingItemsController extends GetxController {
-  final _trendingService = getIt<TrendingItemsService>();
   final _utilityController = Get.find<UtilityController>();
+
+  @override
+  void onInit() {
+    if (_utilityController.isMovieToday) {
+      getTrendingMovies(timeWindow: StringConstant.day);
+    } else {
+      getTrendingMovies(timeWindow: StringConstant.week);
+    }
+    super.onInit();
+  }
+
+  final _trendingService = getIt<TrendingItemsService>();
 
   var trendingMovies = <Movies>[].obs;
   var isMovieFetching = false.obs;
@@ -38,7 +48,6 @@ class TrendingItemsController extends GetxController {
             title: StringConstant.error, message: message);
       },
       (r) {
-        "lmrlmrl3 $r".printLog();
         final values = r["results"];
         trendingMovies.value = List.from(values.map((e) => Movies.fromJson(e)));
       },
