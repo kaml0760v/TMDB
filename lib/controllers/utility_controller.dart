@@ -19,8 +19,12 @@ class UtilityController extends GetxController {
   ].obs;
 
   int get navIndex => _pageIndex.value;
+  
   final _isMovieToday = Preferences.movieIsToday.obs;
+  final _isTvToday = Preferences.tvIsToday.obs;
+
   bool get isMovieToday => _isMovieToday.value;
+  bool get isTvToday => _isTvToday.value;
 
   void setNavIndex(int index) {
     _pageIndex.value = index;
@@ -29,6 +33,11 @@ class UtilityController extends GetxController {
   void toggleTrendingMovieSwitch() {
     _isMovieToday.value = !_isMovieToday.value;
     Preferences.setMoveiIstodayState(_isMovieToday.value);
+  }
+
+   void toggleTrendingTvSwitch() {
+    _isTvToday.value = !_isTvToday.value;
+    Preferences.setTvIstodayState(_isTvToday.value);
   }
 
   Future<void> loadUrl({required String uri}) async {

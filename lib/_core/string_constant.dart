@@ -8,6 +8,7 @@ class StringConstant {
   static const String statusMessage = 'status_message';
   static const String requestToken = 'request_token';
   static const String movie = 'movie';
+  static const String tv = 'tv';
   static const String error = 'Error!';
   static const String day = 'day';
   static const String week = 'week';

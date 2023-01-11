@@ -5,7 +5,7 @@ import 'package:tmdp_getx_mvc/_core/app_theme/app_theme.dart';
 import 'package:tmdp_getx_mvc/models/movies.dart';
 
 class MovieCard extends StatelessWidget {
-  final Movies movies;
+  final Items movies;
   final String posterUrl;
   const MovieCard({
     super.key,

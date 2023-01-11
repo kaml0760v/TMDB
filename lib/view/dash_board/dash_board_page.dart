@@ -6,6 +6,7 @@ import 'package:tmdp_getx_mvc/controllers/trending_items_controller.dart';
 import 'package:tmdp_getx_mvc/view/_core/buttons.dart';
 import 'package:tmdp_getx_mvc/view/dash_board/widgets/trending_movie_switch.dart';
 
+import '../../controllers/utility_controller.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/list_header.dart';
 import 'widgets/movie_card.dart';
@@ -17,6 +18,7 @@ class DashBoardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authContoller = Get.find<AuthController>();
     final configController = Get.find<ConfigurationController>();
+    final utilityController = Get.find<UtilityController>();
     final controller = Get.put(TrendingItemsController());
 
     return Scaffold(
@@ -29,7 +31,14 @@ class DashBoardPage extends StatelessWidget {
               title: "Trending",
               subTitle: "Movies",
               viewMoreTap: () {},
-              additionalToggleWidget: TrendingMovieSwitchBtnBuilder(),
+              additionalToggleWidget: Obx(
+                () => TrendingMovieSwitchBtnBuilder(
+                  trendingController: controller,
+                  utilityController: utilityController,
+                  isFetching: controller.isMovieFetching.value,
+                  isToday: utilityController.isMovieToday,
+                ),
+              ),
             ),
             Flexible(
               child: Obx(
@@ -50,20 +59,28 @@ class DashBoardPage extends StatelessWidget {
             ),
             ListHeader(
               title: "Trending",
-              subTitle: "Movies",
+              subTitle: "Tv",
               viewMoreTap: () {},
-              additionalToggleWidget: TrendingMovieSwitchBtnBuilder(),
+              additionalToggleWidget: Obx(
+                () => TrendingMovieSwitchBtnBuilder(
+                  page: PageType.tv,
+                  isFetching: controller.isTvFetching.value,
+                  trendingController: controller,
+                  utilityController: utilityController,
+                  isToday: utilityController.isTvToday,
+                ),
+              ),
             ),
             Flexible(
               child: Obx(
                 () {
                   return ListView.builder(
-                    itemCount: controller.trendingMovies.length,
+                    itemCount: controller.trendingTv.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return MovieCard(
-                        movies: controller.trendingMovies[index],
+                        movies: controller.trendingTv[index],
                         posterUrl: configController.posterUrl,
                       );
                     },

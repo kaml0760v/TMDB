@@ -6,7 +6,7 @@ class ListHeader extends StatelessWidget {
   final String subTitle;
   final VoidCallback? viewMoreTap;
   final Widget? additionalToggleWidget;
-  
+
   const ListHeader({
     super.key,
     required this.title,
@@ -23,6 +23,7 @@ class ListHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
@@ -35,7 +36,7 @@ class ListHeader extends StatelessWidget {
                       color: AppTheme.primaryColor,
                     ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
               additionalToggleWidget ?? const SizedBox.shrink(),
             ],
           ),

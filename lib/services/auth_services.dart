@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
 import 'package:tmdp_getx_mvc/services/_core/infra_methods.dart';
-import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 
 @LazySingleton()
 class AuthServices {
@@ -48,7 +47,6 @@ class AuthServices {
             Auth.isLoggedIn ? Auth.getSessionId : Auth.getGuestSessionId
       },
       handleSuccess: (responseBody) async {
-        "here $responseBody".printLog();
         return right(true);
       },
     );

@@ -1,4 +1,4 @@
-class Movies {
+class Items {
   int? id;
   List<int>? genreIds;
   String? posterPath;
@@ -14,7 +14,7 @@ class Movies {
   bool? video;
   double? voteAverage;
 
-  Movies({
+  Items({
     this.id,
     this.adult,
     this.genreIds,
@@ -31,7 +31,7 @@ class Movies {
     this.voteCount,
   });
 
-  factory Movies.fromJson(Map<String, dynamic> json) => Movies(
+  factory Items.fromJson(Map<String, dynamic> json) => Items(
         id: json["id"] as int?,
         adult: json['adult'] as bool?,
         genreIds: (json['genre_ids'] as List<dynamic>?)

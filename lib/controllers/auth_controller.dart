@@ -5,7 +5,6 @@ import 'package:tmdp_getx_mvc/_core/routes/app_routes.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/_core/utils/auth.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
-import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
 import 'package:tmdp_getx_mvc/view/_core/widgets/loader_dialog.dart';
 
 import '../services/auth_services.dart';
@@ -128,7 +127,6 @@ class AuthController extends GetxController {
 
         await _accountService.getAccountDetails().then(
               (value) => value.fold((l) => null, (result) {
-                "efekfm $result".printLog();
                 Auth.setUsername(result['username'] ?? "");
                 Auth.setFullname(result['name'] ?? "");
                 Auth.setUserAvatar(

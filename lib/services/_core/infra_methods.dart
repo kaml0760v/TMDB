@@ -7,9 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:tmdp_getx_mvc/_core/app_constant.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/services/_core/failure.dart';
-import 'package:tmdp_getx_mvc/view/_core/presentation_method.dart';
-
-import '../../_core/utils/auth.dart';
 
 enum ApiCallType {
   get,
@@ -62,7 +59,6 @@ class NetworkCall<T> {
           ),
           queryParameters: queryParameter,
         );
-        "wkdwkdwmdwkmd $response".printLog();
       } else if (callType == ApiCallType.post) {
         response = await Dio().post(
           uri,
@@ -75,7 +71,6 @@ class NetworkCall<T> {
           data: body,
         );
       } else if (callType == ApiCallType.delete) {
-        "wdmlwmdwl $body".printLog();
         response = await Dio().delete(
           uri,
           options: Options(
@@ -109,7 +104,6 @@ class NetworkCall<T> {
         if (handle404 != null) {
           return handle404(responseBody);
         } else {
-          "$responseBody".printLog();
           return left(Failure.unexpected(
               errorMsg: responseBody[StringConstant.statusMessage]));
         }
