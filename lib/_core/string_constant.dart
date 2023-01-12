@@ -12,4 +12,8 @@ class StringConstant {
   static const String error = 'Error!';
   static const String day = 'day';
   static const String week = 'week';
+  static const String nowPlaying = 'now_playing';
+  static const String popular = 'popular';
+  static const String topRated = 'top_rated';
+  static const String upcoming = 'upcoming';
 }

@@ -18,4 +18,30 @@ class TrendingItemsService {
       },
     );
   }
+
+  Future<Either<Failure, Map>> getUpcomingTopRatedMovies({
+    required String movieType,
+    String page = "",
+  }) async {
+    return await NetworkCall<Map>().handleApi(
+      endpoint: "movie/$movieType",
+      queryParameters: {"page": page},
+      handleSuccess: (responseBody) async {
+        return right(responseBody);
+      },
+    );
+  }
+
+  Future<Either<Failure, Map>> getUpcomingTopRatedTv({
+    required String tvType,
+    String page = "",
+  }) async {
+    return await NetworkCall<Map>().handleApi(
+      endpoint: "tv/$tvType",
+      queryParameters: {"page": page},
+      handleSuccess: (responseBody) async {
+        return right(responseBody);
+      },
+    );
+  }
 }

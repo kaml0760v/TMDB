@@ -44,12 +44,12 @@ class DashBoardPage extends StatelessWidget {
               child: Obx(
                 () {
                   return ListView.builder(
-                    itemCount: controller.trendingMovies.length,
+                    itemCount: controller.trendingMoviesList.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return MovieCard(
-                        movies: controller.trendingMovies[index],
+                        movies: controller.trendingMoviesList[index],
                         posterUrl: configController.posterUrl,
                       );
                     },
@@ -75,12 +75,34 @@ class DashBoardPage extends StatelessWidget {
               child: Obx(
                 () {
                   return ListView.builder(
-                    itemCount: controller.trendingTv.length,
+                    itemCount: controller.trendingTvList.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return MovieCard(
-                        movies: controller.trendingTv[index],
+                        movies: controller.trendingTvList[index],
+                        posterUrl: configController.posterUrl,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            ListHeader(
+              title: "Upcoming",
+              subTitle: "Movies",
+              viewMoreTap: () {},
+            ),
+            Flexible(
+              child: Obx(
+                () {
+                  return ListView.builder(
+                    itemCount: controller.upcomingMovieList.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return MovieCard(
+                        movies: controller.upcomingMovieList[index],
                         posterUrl: configController.posterUrl,
                       );
                     },
