@@ -31,6 +31,15 @@ class TrendingItemsController extends GetxController {
       getTrendingItems(timeWindow: StringConstant.week, page: PageType.movie);
       getTrendingItems(timeWindow: StringConstant.week, page: PageType.tv);
     }
+
+    getUpcomingTopRatedMovies(movieType: StringConstant.popular, page: PageType.popularMovie);
+    getUpcomingTopRatedMovies(movieType: StringConstant.popular, page: PageType.popularTv);
+    getUpcomingTopRatedMovies(movieType: StringConstant.upcoming, page: PageType.upcomingMovie);
+    getUpcomingTopRatedMovies(movieType: StringConstant.upcoming, page: PageType.upcomingTv);
+    getUpcomingTopRatedMovies(movieType: StringConstant.topRated, page: PageType.topRatedMovie);
+    getUpcomingTopRatedMovies(movieType: StringConstant.topRated, page: PageType.topRatedTv);
+    getUpcomingTopRatedMovies(movieType: StringConstant.nowPlaying, page: PageType.nowPlayingMovie);
+    getUpcomingTopRatedMovies(movieType: StringConstant.nowPlaying, page: PageType.nowPlayingTv);
     super.onInit();
   }
 
@@ -67,6 +76,7 @@ class TrendingItemsController extends GetxController {
   int onAirTvPage = 1;
   int topRatedTvPage = 1;
 
+  /// used to get trending movies and tv shows
   void getTrendingItems({
     required String timeWindow,
     required PageType page,
@@ -88,8 +98,7 @@ class TrendingItemsController extends GetxController {
           unexpected: (value) => value.errorMsg,
         );
 
-        _utilityController.loadSnackbar(
-            title: StringConstant.error, message: message);
+        _utilityController.loadSnackbar(title: StringConstant.error, message: message);
       },
       (r) async {
         final values = r["results"];
@@ -106,7 +115,8 @@ class TrendingItemsController extends GetxController {
     tvPage = 1;
   }
 
-  Future<int> getPage(PageType page) async {
+  /// common function to pass page number to APIs
+  int getPage(PageType page) {
     int tempPage = 1;
     switch (page) {
       case PageType.movie:
@@ -143,6 +153,7 @@ class TrendingItemsController extends GetxController {
     return tempPage;
   }
 
+  /// common function to handle loader
   Future<void> handleLoader(PageType page) async {
     switch (page) {
       case PageType.movie:
@@ -169,39 +180,36 @@ class TrendingItemsController extends GetxController {
     }
   }
 
+  /// common fucntion for handling the apis result.
   Future<void> handleResult(PageType page, dynamic values) async {
     switch (page) {
       case PageType.movie:
-        trendingMoviesList.value =
-            List.from(values.map((e) => Items.fromJson(e)));
+        trendingMoviesList.value = List.from(values.map((e) => Items.fromJson(e)));
+
         break;
       case PageType.tv:
         trendingTvList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.nowPlayingMovie:
-        nowPlayingMovieList.value =
-            List.from(values.map((e) => Items.fromJson(e)));
+        nowPlayingMovieList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.nowPlayingTv:
         airingTodayList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.popularMovie:
-        popularMoviesList.value =
-            List.from(values.map((e) => Items.fromJson(e)));
+        popularMoviesList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.popularTv:
         popularTvList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.topRatedMovie:
-        topRatedMovieList.value =
-            List.from(values.map((e) => Items.fromJson(e)));
+        topRatedMovieList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.topRatedTv:
         topRatedTvList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.upcomingMovie:
-        upcomingMovieList.value =
-            List.from(values.map((e) => Items.fromJson(e)));
+        upcomingMovieList.value = List.from(values.map((e) => Items.fromJson(e)));
         break;
       case PageType.upcomingTv:
         onAirTvList.value = List.from(values.map((e) => Items.fromJson(e)));
@@ -227,6 +235,7 @@ class TrendingItemsController extends GetxController {
     return mediaType;
   }
 
+  /// common function to fetch toprated/upcoming/nowplating/popular movies and tv
   void getUpcomingTopRatedMovies({
     required String movieType,
     required PageType page,
@@ -247,8 +256,7 @@ class TrendingItemsController extends GetxController {
           unexpected: (value) => value.errorMsg,
         );
 
-        _utilityController.loadSnackbar(
-            title: StringConstant.error, message: message);
+        _utilityController.loadSnackbar(title: StringConstant.error, message: message);
       },
       (r) async {
         final values = r["results"];

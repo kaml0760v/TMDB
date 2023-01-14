@@ -16,4 +16,6 @@ class StringConstant {
   static const String popular = 'popular';
   static const String topRated = 'top_rated';
   static const String upcoming = 'upcoming';
+  static const String movies = 'Movies';
+  static const String trending = 'Trending';
 }

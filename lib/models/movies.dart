@@ -9,10 +9,10 @@ class Items {
   String? originalTitle;
   String? title;
   String? backdropPath;
-  double? popularity;
+  num? popularity;
   int? voteCount;
   bool? video;
-  double? voteAverage;
+  num? voteAverage;
 
   Items({
     this.id,
@@ -45,13 +45,11 @@ class Items {
         backdropPath: json['backdrop_path'] as String?,
         originalLanguage: json['original_language'] as String?,
         originalTitle: json['original_title'] as String?,
-        popularity: json['popularity'] as double?,
+        popularity: json['popularity'] as num?,
         title: json['title'] as String?,
         video: json['video'] as bool?,
-        voteAverage: json['vote_average'] as double?,
+        voteAverage: json['vote_average'] as num?,
         voteCount: json['vote_count'] as int?,
-
-        
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,14 +59,13 @@ class Items {
         "overview": overView,
         "poster_path": posterPath,
         "release_date": releaseDate,
-        "backdrop_path":backdropPath,
-        "original_language":originalLanguage,
-        "original_title":originalTitle,
-        "popularity":popularity,
-        "title":title,
-        "video":video,
-        "vote_average":voteAverage,
-        "vote_count":voteCount,
-
+        "backdrop_path": backdropPath,
+        "original_language": originalLanguage,
+        "original_title": originalTitle,
+        "popularity": popularity,
+        "title": title,
+        "video": video,
+        "vote_average": voteAverage,
+        "vote_count": voteCount,
       };
 }

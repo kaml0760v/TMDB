@@ -17,6 +17,7 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 35.w,
+      height: 10.h,
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
