@@ -1,9 +1,11 @@
+import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:tmdp_getx_mvc/_core/injection.dart';
 import 'package:tmdp_getx_mvc/_core/string_constant.dart';
 import 'package:tmdp_getx_mvc/controllers/utility_controller.dart';
 import 'package:tmdp_getx_mvc/models/movies.dart';
 
+import '../services/_core/failure.dart';
 import '../services/trending_items_service.dart';
 
 enum PageType {
@@ -32,14 +34,17 @@ class TrendingItemsController extends GetxController {
       getTrendingItems(timeWindow: StringConstant.week, page: PageType.tv);
     }
 
-    getUpcomingTopRatedMovies(movieType: StringConstant.popular, page: PageType.popularMovie);
-    getUpcomingTopRatedMovies(movieType: StringConstant.popular, page: PageType.popularTv);
-    getUpcomingTopRatedMovies(movieType: StringConstant.upcoming, page: PageType.upcomingMovie);
-    getUpcomingTopRatedMovies(movieType: StringConstant.upcoming, page: PageType.upcomingTv);
-    getUpcomingTopRatedMovies(movieType: StringConstant.topRated, page: PageType.topRatedMovie);
-    getUpcomingTopRatedMovies(movieType: StringConstant.topRated, page: PageType.topRatedTv);
-    getUpcomingTopRatedMovies(movieType: StringConstant.nowPlaying, page: PageType.nowPlayingMovie);
-    getUpcomingTopRatedMovies(movieType: StringConstant.nowPlaying, page: PageType.nowPlayingTv);
+    //movie
+    getUpcomingTopRatedMoviesOrTv(page: PageType.popularMovie);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.upcomingMovie);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.topRatedMovie);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.nowPlayingMovie);
+
+    //tv
+    getUpcomingTopRatedMoviesOrTv(page: PageType.popularTv, type: StringConstant.tv);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.upcomingTv, type: StringConstant.tv);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.topRatedTv, type: StringConstant.tv);
+    getUpcomingTopRatedMoviesOrTv(page: PageType.nowPlayingTv, type: StringConstant.tv);
     super.onInit();
   }
 
@@ -80,13 +85,14 @@ class TrendingItemsController extends GetxController {
   void getTrendingItems({
     required String timeWindow,
     required PageType page,
+    String? pageNumber,
   }) async {
     await handleLoader(page);
 
     final result = await _trendingService.getTrendingItems(
       mediaType: getMediaType(page),
       timeWindow: timeWindow,
-      page: getPage(page).toString(),
+      page: pageNumber ?? getPage(page).toString(),
     );
 
     await handleLoader(page);
@@ -236,15 +242,16 @@ class TrendingItemsController extends GetxController {
   }
 
   /// common function to fetch toprated/upcoming/nowplating/popular movies and tv
-  void getUpcomingTopRatedMovies({
-    required String movieType,
+  void getUpcomingTopRatedMoviesOrTv({
     required PageType page,
+    String type = StringConstant.movie,
   }) async {
     await handleLoader(page);
 
-    final result = await _trendingService.getUpcomingTopRatedMovies(
+    final result = await _trendingService.getUpcomingTopRatedMoviesOrTv(
       movieType: getMovieOrTvType(page),
       page: getPage(page).toString(),
+      type: type,
     );
 
     await handleLoader(page);
@@ -269,24 +276,144 @@ class TrendingItemsController extends GetxController {
     String mediaType = '';
     switch (page) {
       case PageType.nowPlayingMovie:
-      case PageType.nowPlayingTv:
         mediaType = StringConstant.nowPlaying;
+        break;
+      case PageType.nowPlayingTv:
+        mediaType = StringConstant.nowPlayingTv;
         break;
       case PageType.popularMovie:
       case PageType.popularTv:
-        mediaType = StringConstant.popular;
+        mediaType = StringConstant.popular.toLowerCase();
         break;
       case PageType.topRatedMovie:
       case PageType.topRatedTv:
         mediaType = StringConstant.topRated;
         break;
       case PageType.upcomingMovie:
+        mediaType = StringConstant.upcoming.toLowerCase();
+        break;
       case PageType.upcomingTv:
-        mediaType = StringConstant.upcoming;
+        mediaType = StringConstant.upcomingTv;
         break;
       default:
         break;
     }
     return mediaType;
+  }
+
+  void loadMoreItems({
+    required PageType page,
+    String mediaType = StringConstant.movie,
+    String timeWindow = StringConstant.day,
+  }) async {
+    handleLoader(page);
+    handlePageIncrement(page);
+
+    late Either<Failure, Map<dynamic, dynamic>> result;
+    if (page == PageType.movie || page == PageType.tv) {
+      result = await _trendingService.getTrendingItems(
+        mediaType: mediaType.toLowerCase(),
+        timeWindow: timeWindow,
+        page: getPage(page).toString(),
+      );
+    } else {
+      result = await _trendingService.getUpcomingTopRatedMoviesOrTv(
+        movieType: getMovieOrTvType(page),
+        type: mediaType.toLowerCase(),
+        page: getPage(page).toString(),
+      );
+    }
+
+    handleLoader(page);
+
+    result.fold(
+      (l) {
+        final message = l.maybeMap(
+          orElse: () => StringConstant.someWentWrong,
+          unexpected: (value) => value.errorMsg,
+        );
+
+        _utilityController.loadSnackbar(title: StringConstant.error, message: message);
+      },
+      (r) async {
+        final values = r["results"];
+        final List<Items> trendingList = List.from(values.map((e) => Items.fromJson(e)));
+
+        handleAddmoreResult(page, trendingList);
+      },
+    );
+
+    update(['trending_items']);
+  }
+
+  void handleAddmoreResult(PageType page, List<Items> list) {
+    switch (page) {
+      case PageType.movie:
+        trendingMoviesList.addAll(list);
+        break;
+      case PageType.tv:
+        trendingTvList.addAll(list);
+        break;
+      case PageType.upcomingMovie:
+        upcomingMovieList.addAll(list);
+        break;
+      case PageType.upcomingTv:
+        onAirTvList.addAll(list);
+        break;
+      case PageType.popularMovie:
+        popularMoviesList.addAll(list);
+        break;
+      case PageType.popularTv:
+        popularTvList.addAll(list);
+        break;
+      case PageType.topRatedMovie:
+        topRatedMovieList.addAll(list);
+        break;
+      case PageType.topRatedTv:
+        topRatedTvList.addAll(list);
+        break;
+      case PageType.nowPlayingMovie:
+        nowPlayingMovieList.addAll(list);
+        break;
+      case PageType.nowPlayingTv:
+        airingTodayList.addAll(list);
+        break;
+    }
+  }
+
+  void handlePageIncrement(PageType page) {
+    switch (page) {
+      case PageType.movie:
+        moviePage += 1;
+        break;
+      case PageType.tv:
+        tvPage += 1;
+        break;
+      case PageType.upcomingMovie:
+        upcomingMoviePage += 1;
+        break;
+      case PageType.upcomingTv:
+        onAirTvPage += 1;
+        break;
+      case PageType.popularMovie:
+        popularMoviePage += 1;
+        break;
+      case PageType.popularTv:
+        popularTvPage += 1;
+        break;
+      case PageType.topRatedMovie:
+        topRatedMoviePage += 1;
+        break;
+      case PageType.topRatedTv:
+        topRatedTvPage += 1;
+        break;
+      case PageType.nowPlayingMovie:
+        nowPlayingMoviePage += 1;
+        break;
+      case PageType.nowPlayingTv:
+        airingTodayPage += 1;
+        break;
+    }
+    return;
   }
 }

@@ -7,6 +7,7 @@ class Items {
   DateTime? releaseDate;
   String? originalLanguage;
   String? originalTitle;
+  String? name;
   String? title;
   String? backdropPath;
   num? popularity;
@@ -29,6 +30,7 @@ class Items {
     this.video,
     this.voteAverage,
     this.voteCount,
+    this.name,
   });
 
   factory Items.fromJson(Map<String, dynamic> json) => Items(
@@ -47,6 +49,7 @@ class Items {
         originalTitle: json['original_title'] as String?,
         popularity: json['popularity'] as num?,
         title: json['title'] as String?,
+        name: json['name'] as String?,
         video: json['video'] as bool?,
         voteAverage: json['vote_average'] as num?,
         voteCount: json['vote_count'] as int?,
@@ -67,5 +70,6 @@ class Items {
         "video": video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
+        "name":name,
       };
 }

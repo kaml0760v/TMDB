@@ -12,28 +12,38 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configController = Get.find<ConfigurationController>();
-    return Container(
-      color: AppTheme.primaryColor,
-      height: kToolbarHeight,
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Auth.isGuestLoggedIn
-                  ? const Text("guest")
-                  : GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.profile);
-                      },
-                      child: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: (Auth.getAvatar ?? "").isEmpty
-                              ? Container(
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Auth.isGuestLoggedIn
+                ? const Text("guest")
+                : GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.profile);
+                    },
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: (Auth.getAvatar ?? "").isEmpty
+                            ? Container(
+                                alignment: Alignment.center,
+                                decoration: const BoxDecoration(
+                                  color: AppTheme.grey1,
+                                ),
+                                child: const Icon(
+                                  Icons.person,
+                                  color: AppTheme.white,
+                                ),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: '${configController.profileUrl}${Auth.getAvatar}',
+                                fit: BoxFit.scaleDown,
+                                errorWidget: (context, url, error) => Container(
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(
                                     color: AppTheme.grey1,
@@ -42,32 +52,21 @@ class CustomAppBar extends StatelessWidget {
                                     Icons.person,
                                     color: AppTheme.white,
                                   ),
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl:
-                                      '${configController.profileUrl}${Auth.getAvatar}',
-                                  fit: BoxFit.scaleDown,
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: AppTheme.grey1,
-                                    ),
-                                    child: const Icon(
-                                      Icons.person,
-                                      color: AppTheme.white,
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => Container(
-                                    color: AppTheme.grey1,
-                                  ),
                                 ),
-                        ),
+                                placeholder: (context, url) => Container(
+                                  color: AppTheme.grey1,
+                                ),
+                              ),
                       ),
                     ),
-            ],
-          )
-        ],
+                  ),
+          ],
+        ),
+      ),
+      centerTitle: true,
+      title: Text(
+        "TMDB",
+        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: AppTheme.white),
       ),
     );
   }

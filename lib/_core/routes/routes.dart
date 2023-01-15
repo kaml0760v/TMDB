@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:tmdp_getx_mvc/_core/routes/app_routes.dart';
 import 'package:tmdp_getx_mvc/view/auth/auth_page.dart';
 import 'package:tmdp_getx_mvc/view/dash_board/dash_board_page.dart';
+import 'package:tmdp_getx_mvc/view/dash_board/pages/item_lists_page.dart';
 import 'package:tmdp_getx_mvc/view/home/home_page.dart';
 import 'package:tmdp_getx_mvc/view/profile/profile_page.dart';
 import 'package:tmdp_getx_mvc/view/watch_list/watch_list_page.dart';
@@ -34,6 +35,13 @@ class Routes {
       GetPage(
         name: AppRoutes.home,
         page: () => const HomePage(),
+      ),
+      GetPage(
+        name: AppRoutes.itemList,
+        page: () => ItemListsPage(
+          title: Get.arguments['title'],
+          page: Get.arguments['page'],
+        ),
       ),
     ];
   }

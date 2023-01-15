@@ -18,7 +18,7 @@ class ListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -33,7 +33,8 @@ class ListHeader extends StatelessWidget {
               Text(
                 subTitle,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      color: AppTheme.primaryColor,
+                      color: AppTheme.primaryColorDark,
+                      fontWeight: FontWeight.w700,
                     ),
               ),
               const SizedBox(width: 8),
